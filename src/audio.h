@@ -9,6 +9,7 @@
 #include <vector>
 #include <utility>
 #include <map>
+#include <cstring>
 
 #include <iostream>
 
@@ -35,7 +36,7 @@ struct AudioData
 	AudioData(std::string filename)
 	{
 		SNDFILE* file = sf_open(filename.c_str(), SFM_READ, &this->info);
-    	if (sf_error(file) != SF_ERR_NO_ERROR) 
+    	if (sf_error(file) != SF_ERR_NO_ERROR)
 			throw std::runtime_error("failed to load audio data at " + filename);
 		this->sampleCount = info.frames * info.channels;
 		this->data = new float[sampleCount];
@@ -75,14 +76,14 @@ struct Instance
 											FRAMES_PER_BUFFER,
 											instanceCallback,
 											this);
-		if(err != paNoError) 
+		if(err != paNoError)
 			throw std::runtime_error("failed to open default stream for file at " + this->audio->filename);
 	}
 
 	~Instance()
 	{
 		Pa_CloseStream(stream);
-		//if(err != paNoError) throw std::runtime_error("failed to close stream"); 
+		//if(err != paNoError) throw std::runtime_error("failed to close stream");
 	}
 
 	void Play()
@@ -103,7 +104,7 @@ struct Instance
 
 	bool Playing()
 	{
-		return Pa_IsStreamActive(stream); 
+		return Pa_IsStreamActive(stream);
 	}
 
 	AudioData* audio;
@@ -145,7 +146,7 @@ static int instanceCallback(const void *input, void *output,
 class Manager
 {
 public:
-	Manager() 
+	Manager()
 	{
 		if(sizeof(float) != 4)
 			throw std::runtime_error("float must be 32bit");
@@ -156,9 +157,9 @@ public:
 	~Manager()
 	{
 		StopAll();
-		for(auto &audio : loaded) 
+		for(auto &audio : loaded)
 		{
-			delete audio.second; 
+			delete audio.second;
 		}
 		PaError err;
 		err = Pa_Terminate();
@@ -177,7 +178,7 @@ public:
 	{
 		loaded[filename] = new AudioData(filename);
 	}
-	
+
 	void Play(std::string filename, bool loop, float volume)
 	{
 		if(loaded.count(filename) == 0)
@@ -231,10 +232,10 @@ public:
 				return true;
 		return false;
 	}
-	
+
 private:
 	std::map<std::string, AudioData*> loaded;
-	std::vector<Instance*> activeAudio; 
+	std::vector<Instance*> activeAudio;
 };
 
 } //audio namespace end
