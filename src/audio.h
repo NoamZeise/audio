@@ -7,11 +7,8 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <utility>
 #include <map>
 #include <cstring>
-
-#include <iostream>
 
 namespace Audio
 {
@@ -141,7 +138,7 @@ static int instanceCallback(const void *input, void *output,
 	return paContinue;
 }
 
-} //unnamed namespace end
+} //unnamed end
 
 class Manager
 {
