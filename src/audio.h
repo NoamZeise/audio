@@ -161,8 +161,7 @@ public:
 		{
 			delete audio.second;
 		}
-		PaError err;
-		err = Pa_Terminate();
+		PaError err = Pa_Terminate();
 		//if(err != paNoError) throw std::runtime_error("failed to terminate Port Audio");
 	}
 
