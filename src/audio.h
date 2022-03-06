@@ -68,18 +68,13 @@ static int soundCallback(const void *input, void *output,
 {
 	Instance *data = (Instance*)userData;
 	float *out = (float*)output;
-	std::cout << "here" << std::endl;
 	memset(out, 0, sizeof(float) * framesPerBuffer * data->audio->info.channels);
 	for (unsigned int i = 0; i < framesPerBuffer * data->audio->info.channels; i++ )
     {
-		std::cout << "inner" << std::endl;
 		if (data->current >= data->audio->sampleCount)
 			return paComplete;
-					std::cout << "copy" << std::endl;	
 		out[i] = data->audio->data[data->current++];
-					std::cout << "copycomplete" << std::endl;
     }
-			std::cout << "end" << std::endl;
 	return paContinue;
 }
 
@@ -98,6 +93,9 @@ public:
 	}
 	~Manager()
 	{
+		for(auto &x : loaded) {
+			delete x.second; 
+		}
 		PaError err;
 		err = Pa_Terminate();
 		//if(err != paNoError) throw std::runtime_error("failed to terminate Port Audio");
@@ -105,7 +103,7 @@ public:
 
 	void loadAudioFile(std::string filename)
 	{
-		loaded[filename] = AudioData(filename);
+		loaded[filename] = new AudioData(filename);
 	}
 	
 	void Play(std::string filename)
@@ -114,7 +112,7 @@ public:
 		{
 			this->loadAudioFile(filename);
 		}
-		activeAudio.push_back(Instance(&loaded[filename]));
+		activeAudio.push_back(Instance(loaded[filename]));
 		Instance* instance = &activeAudio[activeAudio.size() - 1];
 
 		PaError err = Pa_OpenDefaultStream(&instance->stream,
@@ -137,14 +135,12 @@ public:
         	Pa_Sleep(100);
     	}
 
-		std::cout << instance->current << std::endl;
-
 		err = Pa_CloseStream(instance->stream);
 		if(err != paNoError) throw std::runtime_error("failed to close stream"); 
 		activeAudio.erase(activeAudio.begin());
 	}
 private:
-	std::map<std::string, AudioData> loaded;
+	std::map<std::string, AudioData*> loaded;
 	std::vector<Instance> activeAudio; 
 };
 
