@@ -32,6 +32,7 @@ struct AudioData
 	}
 	AudioData(std::string filename)
 	{
+		info.format = 0;
 		SNDFILE* file = sf_open(filename.c_str(), SFM_READ, &this->info);
     	if (sf_error(file) != SF_ERR_NO_ERROR)
 			throw std::runtime_error("failed to load audio data at " + filename);
