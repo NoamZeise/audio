@@ -18,6 +18,7 @@ Easy cross platform audio header, using portaudio and libsndfile
 ```
 $ sudo apt-get install libsndfile1-dev libasound-dev portaudio19-dev
 ```
+
 ## example use code
 ```
 //start manager -> inits nessecary libraries
