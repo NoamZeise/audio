@@ -5,8 +5,11 @@ Easy cross platform audio header, using portaudio and libsndfile
 - [portaudio](http://files.portaudio.com/docs/v19-doxydocs/tutorial_start.html)
 - [libsndfile](http://www.mega-nerd.com/libsndfile/#Download)
 
-
 ## setup
+
+building is done with cmake, so you can have this as a submodule of your project and call add_subdirectory in a parent directory CMake file.
+
+If you want to build the demo pass "-DBUILD_DEMO=true" when running CMake
 
 ### windows
 
@@ -19,39 +22,7 @@ Easy cross platform audio header, using portaudio and libsndfile
 $ sudo apt-get install libsndfile1-dev libasound-dev portaudio19-dev
 ```
 
-## example use code
-```
-//start manager -> inits nessecary libraries
-Audio::Manager manager;
 
-//            audio path     loop?  volume
-manager.Play("gamemusic.ogg", true, 0.8f);
+## TODO
 
-while(gameActive)
-{
-  if(playerhit)
-    manager.Play("hitsound.wav", false, 0.4f);
-
-   if(pause)
-    manager.SetVolume("gamemusic.ogg", 0.1f);
-   if(unpasue)
-    manager.SetVolume("gamemusic.ogg", 0.8f);
-
-   if(cutscene)
-    manager.Pause("gamemusic.ogg");
-   if(cutsceneEnd)
-    manager.Resume("gamemusic.ogg");
-
-   if(playerdead)
-   {
-    manager.StopAll();
-    manager.Play("deathmusic.ogg", true, 0.7f);
-   }
-   if(respawned)
-   {
-    if(manager.Playing("deathmusic.ogg")
-     manager.Stop("deathmusic.ogg");
-    manager.Play("gamemusic.ogg", true, 0.8f);
-   }
-}
-```
+- change from string dict to more efficient reference system, ie an audio resource id.
