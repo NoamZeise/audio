@@ -1,5 +1,12 @@
-find_package(sndfile REQUIRED)
-find_package(portaudio REQUIRED)
+find_package(sndfile QUIET)
+
+if(NOT sndfile_FOUND)
+  message(WARNING "unable to find sndfile, it might still be found during building")
+endif()
+find_package(portaudio QUIET)
+if(NOT portaudio_FOUND)
+  message(WARNING "unable to find portaudio, it might still be found during building")
+endif()
 
 add_library(audio audio.cpp)
 
