@@ -11,5 +11,6 @@ set(PORTAUDIO_LIB_NAME portaudio)
 
 add_library(audio audio.cpp)
 
+target_include_directories(audio PRIVATE "${SNDFILE_INCLUDE_DIR}")
 target_include_directories(audio PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include/")
-target_link_libraries(audio PRIVATE ${SNDFILE_LIB_NAME} ${PORTAUDIO_LIB_NAME})
+target_link_libraries(audio PRIVATE ${SNDFILE_LIBRARY} ${PORTAUDIO_LIB_NAME})
